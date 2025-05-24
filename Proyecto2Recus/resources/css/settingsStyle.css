@@ -1,0 +1,53 @@
+.settings-background 
+{
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+    margin: auto;
+    margin-right: 8px !important;
+}
+
+.settings-side-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 2vw;
+
+    height: 80vh;
+}
+
+.settings-side-menu button{
+    width: 100%;
+    height: auto;
+
+    padding: 8px !important;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+    
+    font-weight: bold;
+    font-size: large;
+    border-radius: 32px;
+}
+
+.settings-pages {
+    width: 80vw;
+    padding: 2vw;
+}
+
+.settings-option-title
+{
+    font-size: large;
+    font-weight: 700;
+
+    margin: 0;
+}
+
+.settings-option-description
+{
+    font-size: small;
+    font-weight: 300;
+
+    margin: 0;
+    margin-left: 8px;
+}

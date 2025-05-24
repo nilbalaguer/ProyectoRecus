@@ -1,0 +1,46 @@
+.marker-list-configuration-background {
+    display: flex;
+    justify-content: center;
+    height: 80vh;
+    width: 100%;
+}
+
+.marker-list {
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+    height: 60vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.marker-list-creator {
+    border: 2px solid var(--background4);
+    border-radius: 50px;
+    padding: 8px;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    bottom: 12%;
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+}
+
+.marker-list-creator input {
+    border-radius: 50px;
+}
+
+.marker-list-creator button {
+    border-radius: 50px;
+}
+
+.update-list-menu {
+    position: absolute;
+    top: 40%;
+    border: 2px solid var(--background4);
+    padding: 20px;
+    border-radius: 30px;
+}
+
+.mod-menu-button-image {
+    width: 1.5vw;
+}

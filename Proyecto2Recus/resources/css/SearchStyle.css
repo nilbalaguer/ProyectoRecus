@@ -1,0 +1,143 @@
+.search-background {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 6vh;
+}
+
+.search-field {
+    width: 65vw;
+    margin-bottom: 32px;
+
+    border-radius: 42px;
+    padding: 16px;
+    border: none;
+
+    background-color: var(--text) !important;
+    color: var(--background1) !important;
+}
+
+
+.search-user-list-container {
+    width: 60vw;
+    margin: auto;
+    padding-bottom: 4rem;
+}
+
+.search-user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.search-user-container 
+{
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    height: 6rem;
+
+    margin: 8px;
+    padding: 16px;
+
+    border-radius: 16px;
+}
+
+.search-user-container:hover 
+{
+    background-color: var(--background4) !important;
+}
+
+.search-user-information-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.search-user-information-container img {
+    height: 5rem;
+    width: 5rem;
+    border-radius: 100%;
+}
+
+.search-user-information-name 
+{
+    color: white;
+    font-size: large;
+    font-weight: 500;
+}
+
+.search-user-information-username {
+    border-radius: 50px;
+    background-color: var(--text);
+    color: var(--background1);
+    padding: 0px 10px;
+
+    width: auto;
+}
+
+.search-fake-user-image {
+    background-color: var(--background2);
+    height: 87px;
+    width: 87px;
+    border-radius: 100%;
+}
+
+.search-fake-user-name {
+    background-color: var(--background2);
+    margin: 6px;
+    height: 26px;
+    width: 26vw;
+    border-radius: 8px;
+}
+
+.search-fake-user-username {
+    background-color: var(--background2);
+    margin: 6px;
+    height: 26px;
+    width: 16vw;
+    border-radius: 16px;
+}
+
+.search-fake-user-description {
+    background-color: var(--background2);
+    margin: 6px;
+    height: 26px;
+    width: 32vw;
+    border-radius: 16px;
+}
+
+.search-fake-button {
+    background-color: var(--background2);
+    margin: 6px;
+    height: 46px;
+    width: 72px;
+    border-radius: 32px;
+}
+
+.search-fake-user-image, .nombrefalso_carga, .search-fake-button {
+    animation: fade-pulse 1s infinite;
+}
+
+#notfoundsearcherror {
+    text-align: center;
+    margin: 32px;
+}
+
+
+@keyframes fade-pulse {
+    0% {
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.5;
+    }
+}

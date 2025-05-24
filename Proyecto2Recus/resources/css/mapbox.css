@@ -1,0 +1,24 @@
+.mapboxgl-ctrl-top-right
+{
+    top: 5vh !important;
+    z-index: 100;
+}
+
+.mapboxgl-ctrl-bottom-left
+{
+    bottom: 64px !important;
+}
+
+.mapboxgl-ctrl-attrib-inner
+{
+    display: none;
+}
+
+.mapboxgl-ctrl-logo
+{
+    display: none !important;
+}
+.mapboxgl-compact
+{
+    display: none !important;
+}

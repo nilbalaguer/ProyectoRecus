@@ -1,0 +1,154 @@
+.popup {
+    background: black !important;
+    color: white !important;
+    border: 0 !important;
+
+    padding: 20px;
+    border-radius: 16px;
+
+    width: 25vw;
+    min-width: 326px;
+
+    min-height: 45vh !important;
+
+    display: flex;
+    flex-direction: column;
+
+    z-index: 999;
+}
+
+.popup.bottom-popup {
+    position: fixed !important;
+    bottom: 64px !important;
+    right: 8px !important;
+    margin: 0 auto !important;
+}
+
+@media (max-width: 500px) 
+{
+  .popup {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      height: 45vh !important;
+      min-width: unset !important;
+      min-height: unset !important;
+      left: 0 !important;
+      right: 0 !important;
+      border-radius: 16px 16px 0 0;
+      margin: 0 !important;
+      padding: 0 !important;
+  }
+
+  .popup.bottom-popup {
+      bottom: 0 !important;
+      right: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+  }
+}
+
+.popup-header {
+    cursor: move;
+    user-select: none;
+}
+
+.popup-input {
+    background-color: #1a1a1a !important;
+    color: white !important;
+    border-radius: 16px;
+    border-width: 0 !important;
+    padding: 8px;
+    margin-left: 16px;
+
+    font-weight: 500;
+    font-size: medium;
+}
+
+.popup-input::placeholder {
+    color: #787878 !important;
+    font-weight: 700;
+}
+
+.popup-input:focus {
+    outline: none;
+}
+
+.popup-button {
+    background-color: #ffd534;
+    color: black;
+    font-weight: 700;
+    font-size: x-large;
+    border-radius: 32px;
+    padding-left: 33%;
+    padding-right: 33%;
+    border-width: 0 !important;
+}
+
+.popup-button:hover {
+    background-color: #d7b631;
+    border-width: 0 !important;
+    color: #1a1a1a;
+}
+
+.popup-button:disabled {
+    background-color: #4d400f;
+}
+
+.popup-button:active {
+    color: white;
+}
+
+.popup-footer {
+    position: absolute;
+    left: 0;
+    bottom: 16px;
+    width: 100%;
+    text-align: center;
+}
+
+.popup-list-item {
+    background-color: #1a1a1a;
+
+    width: 90%;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 8px;
+    border-radius: 16px;
+
+    font-weight: 700;
+    font-size: larger;
+
+    margin-bottom: 8px;
+}
+
+.popup-list-item:hover {
+    background-color: var(--background2);
+}
+
+.popup-list-item-active {
+    border-radius: 100%;
+    width: 16px !important;
+    height: 16px !important;
+
+    box-sizing: border-box !important;
+
+    background-color: #ffd534;
+
+    margin: auto;
+    padding: 0;
+}
+
+.popup-fade-bottom {
+    position: absolute;
+    bottom: 72px;
+    left: 0;
+    right: 0;
+    height: 25px;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0),
+        rgba(0, 0, 0, 1)
+    );
+}

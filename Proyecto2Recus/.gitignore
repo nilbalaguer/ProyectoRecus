@@ -1,0 +1,55 @@
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/vendor
+.env
+.env.backup
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.idea
+/.vscode
+package-lock.json
+composer.lock
+yarn.lock
+/storage/media-library/temp
+
+# Dependencias de PHP y Node.js
+/vendor
+/node_modules
+/public/build
+/public/hot
+
+# Archivos sensibles y configuración local
+.env*
+Homestead.*
+auth.json
+
+# Archivos de caché y logs
+.phpunit.result.cache
+/.phpunit.cache
+npm-debug.log*
+yarn-error.log*
+storage/*.key
+
+# Configuración de editores y herramientas locales
+/.fleet
+/.idea
+/.vscode
+
+# Laravel storage (excepto app/public para assets accesibles)
+storage/debugbar/
+storage/framework/*
+storage/logs/*
+storage/oauth-private.key
+storage/oauth-public.key
+storage/*.key
+
+# SQLite database (si usas SQLite)
+database/database.sqlite
+database/database.sqlite-journal

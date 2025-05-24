@@ -1,0 +1,119 @@
+
+label
+{
+    font-weight: 700;
+}
+
+input
+{
+    background: none !important;
+    background-color: none !important;
+    border-width: 0 !important;
+    color: white !important;
+}
+
+input::placeholder
+{
+    color: #787878 !important;
+}
+
+input:-webkit-autofill {
+    background-color: transparent !important;
+}
+
+input:-moz-autofill {
+    background-color: transparent !important;
+}
+
+input:-ms-input-placeholder {
+    background-color: transparent !important;
+}
+.loginContainer
+{
+    background: black;
+}
+
+.iniciosession {
+    color: var(--text);
+    text-align: center;
+}
+
+.iniciosession * {
+    font-size: 110%;
+}
+
+.iniciosession div div {
+    margin-top: 4rem;
+}
+
+.iniciosession h2 {
+    font-size: 270%;
+}
+
+.iniciosession input {
+    background-color: rgba(0, 0, 0, 0.0);
+    border: none;
+    color: var(--background3);
+}
+
+.iniciosession input:hover {
+    background-color: var(--background1);
+    color: var(--text);
+}
+
+.iniciosession button {
+    position: absolute;
+    background-color: var(--text);
+    color: var(--background1);
+    padding: 1rem;
+    border-radius: 50px;
+    top: 120%;
+    right: 25%;
+    left: 25%;
+    
+}
+
+.checkLabel
+{
+    width: 100%;
+
+    font-weight: 200; 
+    font-size: smaller;
+    text-align: left !important;
+}
+
+.checkInput {
+    border: 1px solid white !important;
+    background-color: none !important;
+    transition: background-color 0.3s ease
+}
+
+.checkInput:checked {
+    background-color: white !important;
+    transition: background-color 0.3s ease
+}
+
+.name-and-username-register {
+    display: flex;
+    justify-content: center;
+}
+
+.advertisment-menu {
+    background-image: url('/images/advertisment.png');
+    background-size: 80%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.advertisment-menu div input {
+    text-align: center !important;
+}
+
+.campo-email-registro {
+    margin-top: 20px;
+}
+
+.form-registro {
+    margin: 0px !important;
+    padding: 0px !important;
+}

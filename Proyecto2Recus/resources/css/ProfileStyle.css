@@ -1,0 +1,129 @@
+.profile-background {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    top: 0%;
+    width: 100%;
+}
+
+.profile-info-container 
+{
+    padding-top: 15vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-info-username 
+{
+    color: var(--background1);
+    background-color: var(--text);
+
+    font-weight: 700;
+    font-size: 20px;
+
+    padding-left: 12px;
+    padding-right: 12px;
+
+    border-radius: 16px;
+
+    margin: 4px;
+}
+
+.profile-info-name 
+{
+    color: white;
+    font-weight: 600;
+    margin: 4px;
+}
+
+.profile-info-pfp
+{
+    width: 20vh;
+    height: 20vh;
+
+    border-radius: 32px;
+}
+
+.profile-markers-list {
+    margin-top: 2vh;
+    width: 100%;
+    padding: 5vw;
+}
+
+.profile-markers-list h4 {
+    text-align: left;
+}
+
+.numeroseguidores {
+    transition: 300ms;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+    cursor: pointer;
+}
+
+.numeroseguidores h3 {
+    border-radius: 100%;
+    width: 3rem;
+    background-color: var(--text);
+    color: var(--background1);
+    padding: 10px;
+    text-align: center;
+}
+
+/*Panel de amigos*/
+.friends-panel {
+    position: fixed;
+    top: 15vh;
+    left: 12vw;
+    background-color: var(--background1);
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+    width: 80vw;
+    height: 60vh;
+    z-index: 10;
+    color: white;
+    border-radius: 30px;
+    padding: 20px;
+}
+
+.friendlistprofile {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    height: 50vh;
+}
+
+.friendlistprofile::-webkit-scrollbar {
+    width: 0.8rem;
+}
+
+.friendlistprofile::-webkit-scrollbar-track {
+    background: var(--background4);
+    border-top-right-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.friendlistprofile::-webkit-scrollbar-thumb {
+    background: var(--background3);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.friendlistprofile::-webkit-scrollbar-thumb:hover {
+    background: var(--text);
+}
+
+.closse-friend-panel {
+    transition: 300ms;
+    border-radius: 100%;
+    border: none;
+}
+
+.closse-friend-panel:hover {
+    transition: 300ms;
+    filter: invert();
+}

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="16"
+   height="16"
+   fill="currentColor"
+   class="bi bi-bell-fill"
+   viewBox="0 0 16 16"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="icon_notification-bell.svg"
+   inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect3"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,1,0,1,0,0,0,10 @ F,1,0,1,0,0.1,0,10 @ F,1,0,1,0,0.1,0,10 @ F,0,0,1,0,0.1,0,10 | F,1,0,1,0,0,0,10 @ F,1,0,1,0,0.1,0,10 @ F,1,0,1,0,0.1,0,10 @ F,1,0,1,0,0.1,0,10 @ F,1,0,1,0,0.1,0,10 @ F,1,0,1,0,0.1,0,10 @ F,0,0,1,0,0.1,0,10"
+       radius="10"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="10"
+       flexible="true"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+    <inkscape:path-effect
+       effect="fillet_chamfer"
+       id="path-effect1"
+       is_visible="true"
+       lpeversion="1"
+       nodesatellites_param="F,1,0,1,0,0,0,10 @ F,1,0,1,0,0,0,10 @ F,1,0,1,0,0,0,10 @ F,0,0,1,0,0,0,10 | F,1,0,1,0,0,0,10 @ F,1,0,1,0,0,0,10 @ F,1,0,1,0,0,0,10 @ F,1,0,1,0,0,0,10 @ F,1,0,1,0,0,0,10 @ F,1,0,1,0,0,0,10 @ F,0,0,1,0,0,0,10"
+       radius="0"
+       unit="px"
+       method="auto"
+       mode="F"
+       chamfer_steps="10"
+       flexible="true"
+       use_knot_distance="true"
+       apply_no_radius="true"
+       apply_with_radius="true"
+       only_selected="false"
+       hide_knots="false" />
+  </defs>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="24.59375"
+     inkscape:cx="10.043202"
+     inkscape:cy="10.917408"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     id="path1"
+     style="fill:#ffffff"
+     d="M 8 0 C 7.4657004 0 6.9322582 0.36636147 7.0058594 1.0996094 C 4.6751767 1.5728808 2.9995231 3.6217513 3 6 C 3 6.3426603 2.9505657 7.0567631 2.8378906 7.90625 L 2.8359375 7.90625 C 2.7721178 8.3887815 2.6873284 8.9147457 2.5800781 9.4414062 C 2.5798218 9.4426648 2.5803347 9.4440539 2.5800781 9.4453125 C 2.5799496 9.4459399 2.5802067 9.4466382 2.5800781 9.4472656 C 2.4007494 10.326517 2.156127 11.207512 1.8320312 11.894531 C 1.5059556 12.585749 1.6271935 13 2.4003906 13 L 14.410156 13 C 14.735728 13 14.77719 12.847121 14.580078 12.589844 C 14.003764 11.837615 13.615119 10.479226 13.367188 9.171875 C 13.284544 8.7360913 13.216996 8.3065403 13.164062 7.90625 L 13.162109 7.90625 C 13.049434 7.0567631 13 6.3426603 13 6 C 13 3.5800048 11.279136 1.5606084 8.9941406 1.0996094 C 9.0677418 0.36636147 8.5342996 -1.4802959e-16 8 0 z M 6.3261719 14 C 6.1462269 14 5.9964545 14.146814 6.0253906 14.324219 C 6.1803912 15.274508 7.0058894 16 8 16 C 8.9684803 16 9.7766146 15.310647 9.9609375 14.396484 C 10.004537 14.180248 9.8205229 14 9.5996094 14 L 6.3261719 14 z " />
+</svg>
