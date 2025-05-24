@@ -4,28 +4,84 @@ import axios from 'axios';
 
 // MaboxGL Compostable
 import { emitter } from '@/composables/MapUtils';
-import { InitializeMap, SetFriends, ReloadMapMarkers, AddMarkerToMap, SetMarkers, HideCenterMarker, OnMapDblClick, ShowMarkerOnMapCenter } from "@/composables/MapUtils.js";
+import {
+    InitializeMap,
+    SetFriends,
+    ReloadMapMarkers,
+    SetMarkers,
+    HideCenterMarker,
+    OnMapDblClick,
+    ShowMarkerOnMapCenter
+} from "@/composables/MapUtils.js";
+
 import PopupCreateMarker from '../../components/PopupCreateMarker.vue';
 import PopupShowMarker from '../../components/PopupShowMarker.vue';
-import { showMarkerById, createNewMarker } from '../../composables/useMarkers.js';
-import { create } from 'lodash';
+import { showMarkerById } from '../../composables/useMarkers.js';
 
 const createMarkerPopupVisible = ref(false);
 const showMarkerDataPopupVisible = ref(true);
-
 const selectedMarkerData = ref(null);
+const historialUbicaciones = ref([]);
 
+let map; // guardar instancia del mapa
+
+// Manejar clic en marcador del mapa
 async function handleMarkerClick(id) {
-    const data = await showMarkerById(id).then()
-    {
+    const data = await showMarkerById(id);
+
+    if (data) {
         selectedMarkerData.value = data;
         showMarkerDataPopupVisible.value = true;
+        guardarUbicacionEnHistorial(data);
+    }
+}
+
+// Mover el mapa a una ubicación desde el historial
+function irAUbicacion(ubicacion) {
+    if (!map || !ubicacion.lat || !ubicacion.lng) return;
+
+    map.flyTo({
+        center: [ubicacion.lng, ubicacion.lat],
+        zoom: 15,
+        essential: true
+    });
+
+    selectedMarkerData.value = ubicacion;
+    showMarkerDataPopupVisible.value = true;
+}
+
+// Guardar historial en sessionStorage
+function guardarUbicacionEnHistorial(marker) {
+    const key = 'historialUbicaciones';
+    let historial = JSON.parse(sessionStorage.getItem(key)) || [];
+
+    // Evitar duplicados
+    if (!historial.find(item => item.id === marker.id)) {
+        historial.unshift(marker);
     }
 
+    // Limitar a 5
+    historial = historial.slice(0, 5);
+
+    sessionStorage.setItem(key, JSON.stringify(historial));
+    historialUbicaciones.value = historial;
+}
+
+// Cargar historial al montar
+function cargarHistorialDesdeSession() {
+    const historial = JSON.parse(sessionStorage.getItem('historialUbicaciones')) || [];
+    historialUbicaciones.value = historial;
+}
+
+// Mostrar marcador central solo si está visible el popup de crear
+function HandleCenterMarker() {
+    if (createMarkerPopupVisible.value)
+        ShowMarkerOnMapCenter();
+    else
+        HideCenterMarker();
 }
 
 onMounted(async () => {
-    // Event, on marked clicked get id.
     emitter.on('marker-clicked', handleMarkerClick);
 
     const friendsConnected = await loadUsers();
@@ -34,35 +90,26 @@ onMounted(async () => {
     if (friendsConnected && Array.isArray(friendsConnected)) {
         SetFriends(friendsConnected);
         SetMarkers(allMarkers);
-    }
-    else {
+    } else {
         console.error("Error: La respuesta no es un array válido.");
     }
 
-    // Map
-    const map = InitializeMap();
+    // Iniciar mapa
+    map = InitializeMap();
+
     map.on('load', () => {
-        OnMapDblClick((e) => {
+        OnMapDblClick(() => {
             ShowMarkerOnMapCenter();
             createMarkerPopupVisible.value = true;
         });
 
         ReloadMapMarkers(map);
 
-        map.on('move', () => {
-            HandleCenterMarker();
-        });
-        map.on('zoom', () => {
-            HandleCenterMarker();
-        });
+        map.on('move', HandleCenterMarker);
+        map.on('zoom', HandleCenterMarker);
     });
 
-    function HandleCenterMarker() {
-        if (createMarkerPopupVisible.value == true)
-            ShowMarkerOnMapCenter();
-        else
-            HideCenterMarker();
-    }
+    cargarHistorialDesdeSession();
 });
 
 async function loadUsers() {
@@ -88,18 +135,42 @@ async function loadMarkers() {
 function ToggleCreateMarker() {
     createMarkerPopupVisible.value = !createMarkerPopupVisible.value;
 }
-
 </script>
 
 <template>
-
     <div>
         <PopupCreateMarker v-model:visible="createMarkerPopupVisible" />
-        <PopupShowMarker v-if="selectedMarkerData != null" v-model:visible="showMarkerDataPopupVisible"
-            :marker=selectedMarkerData />
+        <PopupShowMarker
+            v-if="selectedMarkerData != null"
+            v-model:visible="showMarkerDataPopupVisible"
+            :marker="selectedMarkerData"
+        />
 
-            <button class="button-primary d-block d-sm-none" @click="ToggleCreateMarker" style="position: fixed; bottom: 64px; right: 16px; width: 32px; height: 32px; z-index: 999; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; border-radius: 50%; border: 0;">+</button>
+        <!-- Botón para crear marcador (solo móvil) -->
+        <button
+            class="button-primary d-block d-sm-none"
+            @click="ToggleCreateMarker"
+            style="position: fixed; bottom: 64px; right: 16px; width: 32px; height: 32px; z-index: 999; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; border-radius: 50%; border: 0;"
+        >
+            +
+        </button>
 
+        <!-- SessionStorage JS -->
+        <div class="historialUbicacionesMenu">
+            <h3>Historial De Ubicaciones</h3>
+            <ul>
+                <li
+                    v-for="ubicacion in historialUbicaciones"
+                    :key="ubicacion.id"
+                    @click="irAUbicacion(ubicacion)"
+                    style="cursor: pointer;"
+                >
+                    <p>{{ ubicacion.name || `Ubicación #${ubicacion.id}` }}</p> <button><img src="images/icon_eye.svg"></button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Mapa -->
         <div id="map"></div>
     </div>
 </template>

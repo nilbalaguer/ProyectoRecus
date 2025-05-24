@@ -281,3 +281,32 @@ hr {
     transition: 300ms;
     filter: invert();
 }
+
+/*Historial Ubicaciones*/
+.historialUbicacionesMenu {
+    position: fixed;
+    left: 1%;
+    top: 10%;
+    z-index: 2 !important;
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.historialUbicacionesMenu h3 {
+    font-size: 110%;
+}
+
+.historialUbicacionesMenu ul {
+    margin: 15px;
+}
+
+.historialUbicacionesMenu li {
+    display: flex;
+    justify-content: space-between;
+}
+
+.historialUbicacionesMenu button {
+    border-radius: 20px;
+}
