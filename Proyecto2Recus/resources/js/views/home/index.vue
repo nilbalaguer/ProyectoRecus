@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue';
 import axios from 'axios';
 
-// MaboxGL Compostable
 import { emitter } from '@/composables/MapUtils';
 import {
     InitializeMap,
@@ -23,9 +22,12 @@ const showMarkerDataPopupVisible = ref(true);
 const selectedMarkerData = ref(null);
 const historialUbicaciones = ref([]);
 
-let map; // guardar instancia del mapa
+let map;
 
-// Manejar clic en marcador del mapa
+function porId(id) {
+    return item => item.id === id;
+}
+
 async function handleMarkerClick(id) {
     const data = await showMarkerById(id);
 
@@ -36,7 +38,6 @@ async function handleMarkerClick(id) {
     }
 }
 
-// Mover el mapa a una ubicación desde el historial
 function irAUbicacion(ubicacion) {
     if (!map || !ubicacion.lat || !ubicacion.lng) return;
 
@@ -50,30 +51,24 @@ function irAUbicacion(ubicacion) {
     showMarkerDataPopupVisible.value = true;
 }
 
-// Guardar historial en sessionStorage
 function guardarUbicacionEnHistorial(marker) {
     const key = 'historialUbicaciones';
     let historial = JSON.parse(sessionStorage.getItem(key)) || [];
 
-    // Evitar duplicados
-    if (!historial.find(item => item.id === marker.id)) {
+    if (!historial.find(porId(marker.id))) { //JsAvanzado
         historial.unshift(marker);
     }
 
-    // Limitar a 5
     historial = historial.slice(0, 5);
-
     sessionStorage.setItem(key, JSON.stringify(historial));
     historialUbicaciones.value = historial;
 }
 
-// Cargar historial al montar
 function cargarHistorialDesdeSession() {
     const historial = JSON.parse(sessionStorage.getItem('historialUbicaciones')) || [];
     historialUbicaciones.value = historial;
 }
 
-// Mostrar marcador central solo si está visible el popup de crear
 function HandleCenterMarker() {
     if (createMarkerPopupVisible.value)
         ShowMarkerOnMapCenter();
@@ -94,7 +89,6 @@ onMounted(async () => {
         console.error("Error: La respuesta no es un array válido.");
     }
 
-    // Iniciar mapa
     map = InitializeMap();
 
     map.on('load', () => {
@@ -146,7 +140,6 @@ function ToggleCreateMarker() {
             :marker="selectedMarkerData"
         />
 
-        <!-- Botón para crear marcador (solo móvil) -->
         <button
             class="button-primary d-block d-sm-none"
             @click="ToggleCreateMarker"
@@ -155,7 +148,6 @@ function ToggleCreateMarker() {
             +
         </button>
 
-        <!-- SessionStorage JS -->
         <div class="historialUbicacionesMenu">
             <h3>Historial De Ubicaciones</h3>
             <ul>
@@ -165,12 +157,12 @@ function ToggleCreateMarker() {
                     @click="irAUbicacion(ubicacion)"
                     style="cursor: pointer;"
                 >
-                    <p>{{ ubicacion.name || `Ubicación #${ubicacion.id}` }}</p> <button><img src="images/icon_eye.svg"></button>
+                    <p>{{ ubicacion.name || `Ubicación #${ubicacion.id}` }}</p> 
+                    <button><img src="images/icon_eye.svg"></button>
                 </li>
             </ul>
         </div>
 
-        <!-- Mapa -->
         <div id="map"></div>
     </div>
 </template>

@@ -48,19 +48,17 @@ async function loadDataFromRequestUser() {
 }
 
 async function loadMarkers() {
-    let groupedMarkers = {};
-
-    for (let marker of requestMarkerData.value.markers) {
+    markersDividedByList.value = await requestMarkerData.value.markers.reduce(async (accPromise, marker) => {
+        const acc = await accPromise;
         const listId = marker.marker_list_id;
-        if (!groupedMarkers[listId]) {
-            groupedMarkers[listId] = { marker_list: await getMarkerListById(listId), markers: [] };
-        }
-        groupedMarkers[listId].markers.push(marker);
-    }
 
-    // Guardamos el diccionario con las listas agrupadas
-    markersDividedByList.value = groupedMarkers;
-    console.log(markersDividedByList.value);
+        if (!acc[listId]) {
+            acc[listId] = { marker_list: await getMarkerListById(listId), markers: [] };
+        }
+
+        acc[listId].markers.push(marker);
+        return acc;
+    }, Promise.resolve({}));
 }
 
 
