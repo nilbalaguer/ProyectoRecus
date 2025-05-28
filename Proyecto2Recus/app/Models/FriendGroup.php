@@ -16,8 +16,15 @@ class FriendGroup extends Model
         'owner_user_id',
     ];
 
+    // Relación N:M con usuarios (miembros del grupo)
     public function friends()
     {
-        return $this->belongsToMany(User::class, 'friend_groups_friends', 'friend_group_id', 'id_friend');
+        return $this->belongsToMany(User::class, 'friend_groups_friends', 'friend_group_id', 'friends_id');
+    }
+
+    // Relación 1:N con el usuario que creó el grupo
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'owner_user_id');
     }
 }
