@@ -11,10 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('friend_groups', function (Blueprint $table) {
+        Schema::create('marker_reviews', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->integer('owner_user_id');
+            $table->integer('review_stars');
+            $table->string('review_content')->nullable();
+
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('marker_id')->constrained('markers')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('friend_groups');
+        Schema::dropIfExists('marker_reviews');
     }
 };

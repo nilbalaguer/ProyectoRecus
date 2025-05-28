@@ -14,8 +14,13 @@ return new class extends Migration
         Schema::create('marker_list', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('owner_user_id');
+
+            $table->foreignId('owner_user_id')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+
             $table->integer('emoji_identifier');
+
             $table->timestamps();
         });
     }
@@ -25,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('marker_list');
+        Schema::dropIfExists('marker_lists');
     }
 };

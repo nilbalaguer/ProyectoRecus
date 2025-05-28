@@ -13,11 +13,26 @@ return new class extends Migration
     {
         Schema::create('friends', function (Blueprint $table) {
             $table->id();
+
             $table->boolean('request_status')->default(false);
-            $table->foreignId('sender_user_id')->constrained('users');
-            $table->foreignId('reciver_user_id')->constrained('users');
-            $table->integer('friend_group_id')->nullable();
+
+            $table->foreignId('sender_user_id')
+                ->constrained('users')
+                ->onDelete('cascade');
+
+            $table->foreignId('reciver_user_id')
+                ->constrained('users')
+                ->onDelete('cascade');
+
+            $table->foreignId('friend_group_id')
+                ->nullable()
+                ->constrained('friend_groups')
+                ->nullOnDelete();
+
             $table->timestamps();
+
+            // Asegura que no se repitan relaciones
+            $table->unique(['sender_user_id', 'reciver_user_id']);
         });
     }
 
