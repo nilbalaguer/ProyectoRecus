@@ -122,7 +122,7 @@ cargarUsers();
 
                 <div>
                     <button v-if="friendsRequestSended.some(friend => friend.id === user.id)"
-                        @click.stop.prevent="deleteRequest(user.id)" class="secondary-button danger-button-hover"
+                        @click.stop.prevent="deleteRequest(user.id)" class="secondary-button danger-button danger-button-hover"
                         style="min-width: 7rem;">
                         {{ $t('cancel') }}
                     </button>
