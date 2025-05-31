@@ -13,11 +13,9 @@ async function cargarUsers() {
         .then(response => {
             usersList.value = response.data;
 
-            // Cargar la imagen del usuario
             usersList.value.forEach(user => {
                 try {
                     user.image = user.media_url ? user.media_url.split("localhost/")[1] : "";
-
                 } catch (error) {
                     user.image = "";
                 }
@@ -30,33 +28,36 @@ async function cargarUsers() {
 
     axios.get('http://127.0.0.1:8000/api/friends/GetUsersWithFriendRequests')
         .then(response => {
-            friendsRequestSended.value = response.data;
+            friendsRequestSended.value = response.data; // ← array plano de IDs
         })
         .catch(error => {
             console.log(error);
-        })
+        });
 }
 
 async function sendRequest(id_reciver) {
     await axios.post('http://127.0.0.1:8000/api/friend', {
-        "id_sender": authStore().user.id,
-        "id_receiver": id_reciver
+        "user_id": authStore().user.id,
+        "friend_id": id_reciver
     }).then(response => {
-        friendsRequestSended.value.push({ id: id_reciver });
+        friendsRequestSended.value.push(id_reciver); // ← solo el ID
     }).catch(error => {
         console.error(error);
     });
 }
 
 async function deleteRequest(friend_id) {
-    axios.get(`http://127.0.0.1:8000/api/friends/destroyRequest?id_sender=${authStore().user.id}&id_receiver=${friend_id}`)
-        .then(response => {
-            console.log('Friendship deleted:', response.data);
-            friendsRequestSended.value = friendsRequestSended.value.filter(friend => friend.id !== friend_id);
-        })
-        .catch(error => {
-            console.error('There was an error deleting the friendship:', error.response?.data || error.message);
+    try {
+        let response = await axios.post('http://127.0.0.1:8000/api/friends/delete', {
+            friend_id: friend_id
         });
+
+        console.log('Friendship deleted:', response.data);
+        friendsRequestSended.value = friendsRequestSended.value.filter(id => id !== friend_id);
+
+    } catch (error) {
+        console.error('There was an error deleting the friendship:', error.response?.data || error.message);
+    }
 }
 
 function manejarInput() {
@@ -121,7 +122,7 @@ cargarUsers();
                 </div>
 
                 <div>
-                    <button v-if="friendsRequestSended.some(friend => friend.id === user.id)"
+                    <button v-if="friendsRequestSended.includes(user.id)"
                         @click.stop.prevent="deleteRequest(user.id)" class="secondary-button danger-button danger-button-hover"
                         style="min-width: 7rem;">
                         {{ $t('cancel') }}
@@ -129,7 +130,6 @@ cargarUsers();
 
                     <button v-else @click.stop.prevent="sendRequest(user.id)" class="secondary-button button-hover"
                         style="min-width: 6rem;">
-
                         {{ $t('addFriendText') }}
                     </button>
                 </div>
@@ -141,7 +141,6 @@ cargarUsers();
             </div>
 
         </div>
-
     </div>
 </template>
 

@@ -65,25 +65,32 @@ class User extends Authenticatable implements HasMedia
     }
 
     // Relaciones de amigos
-    public function sentFriendRequests()
+    public function friends()
     {
-        return $this->hasMany(Friend::class, 'sender_user_id');
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
+                    ->withTimestamps();
     }
+    //Anterior
+    // public function sentFriendRequests()
+    // {
+    //     return $this->hasMany(Friend::class, 'sender_user_id');
+    // }
 
-    public function receivedFriendRequests()
-    {
-        return $this->hasMany(Friend::class, 'reciver_user_id');
-    }
+    // public function receivedFriendRequests()
+    // {
+    //     return $this->hasMany(Friend::class, 'reciver_user_id');
+    // }
 
-    public function friendsReceived()
-    {
-        return $this->hasMany(Friend::class, 'reciver_user_id')->with('sender');
-    }
+    // public function friendsReceived()
+    // {
+    //     return $this->hasMany(Friend::class, 'reciver_user_id')->with('sender');
+    // }
 
-    public function friendsSent()
-    {
-        return $this->hasMany(Friend::class, 'sender_user_id')->with('reciver');
-    }
+    // public function friendsSent()
+    // {
+    //     return $this->hasMany(Friend::class, 'sender_user_id')->with('reciver');
+    // }
+
 
     // Grupos de amigos a los que pertenece (N:M)
     public function friendGroups()

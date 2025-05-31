@@ -11,28 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('friends', function (Blueprint $table) {
+        Schema::create('friend_user', function (Blueprint $table) {
             $table->id();
-
-            $table->boolean('request_status')->default(false);
-
-            $table->foreignId('sender_user_id')
-                ->constrained('users')
-                ->onDelete('cascade');
-
-            $table->foreignId('reciver_user_id')
-                ->constrained('users')
-                ->onDelete('cascade');
-
-            $table->foreignId('friend_group_id')
-                ->nullable()
-                ->constrained('friend_groups')
-                ->nullOnDelete();
-
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('friend_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
 
-            // Asegura que no se repitan relaciones
-            $table->unique(['sender_user_id', 'reciver_user_id']);
+            $table->unique(['user_id', 'friend_id']);
         });
     }
 
@@ -41,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('friends');
+        Schema::dropIfExists('friend_user');
     }
 };

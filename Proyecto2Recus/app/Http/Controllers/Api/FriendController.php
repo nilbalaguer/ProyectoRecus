@@ -3,159 +3,78 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use App\Models\Friend;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FriendController extends Controller
 {
-    /*
-     * Show list of all friends (Index)
-     */
+    // Mostrar tabla intermedia completa
     public function index()
     {
-        try {
-            $friends = Friend::all();
-            return response()->json($friends, 200);
-        } catch (\Exception $e) {
-            return response()->json(["status" => 500, "Error" => $e->getMessage()]);
-        }
+        $friends = DB::table('friend_user')->get();
+        return response()->json($friends, 200);
     }
 
-    /*
-     * Creates a new friend request (Store)
-     */
+    // Crear amistad mutua
     public function store(Request $request)
     {
         $request->validate([
-            'id_sender' => 'required|exists:users,id',
-            'id_receiver' => 'required|exists:users,id',
+            'user_id' => 'required|exists:users,id',
+            'friend_id' => 'required|exists:users,id',
         ]);
 
-        if ($request->id_sender != auth()->id()) {
-            return response()->json(['message' => 'Error you are not authorized to do this'], 401);
+        $userId = $request->user_id;
+        $friendId = $request->friend_id;
+
+        if ($userId == $friendId) {
+            return response()->json(['message' => 'You can’t be your own friend'], 400);
         }
 
-        if ($request->id_sender == $request->id_receiver) {
-            return response()->json(['message' => 'You cant be your own friend', 'type' => 'bad'], 200);
+        $alreadyFriends = DB::table('friend_user')->where(function ($query) use ($userId, $friendId) {
+            $query->where('user_id', $userId)->where('friend_id', $friendId);
+        })->orWhere(function ($query) use ($userId, $friendId) {
+            $query->where('user_id', $friendId)->where('friend_id', $userId);
+        })->exists();
+
+        if ($alreadyFriends) {
+            return response()->json(['message' => 'Already friends'], 200);
         }
 
-        $existingFriendship = Friend::where(function ($query) use ($request) {
-            $query->where('sender_user_id', $request->id_sender)
-                ->where('reciver_user_id', $request->id_receiver);
-        })
-            ->orWhere(function ($query) use ($request) {
-                $query->where('sender_user_id', $request->id_receiver)
-                    ->where('reciver_user_id', $request->id_sender);
-            })
-            ->first();
-
-        if ($existingFriendship) {
-            return response()->json(['message' => 'Already sent', 'type' => 'bad'], 200);
-        }
-
-        $friendship = Friend::create([
-            'sender_user_id' => $request->id_sender,
-            'reciver_user_id' => $request->id_receiver,
-            'request_status' => 0, // 0 = pending
+        DB::table('friend_user')->insert([
+            ['user_id' => $userId, 'friend_id' => $friendId],
+            ['user_id' => $friendId, 'friend_id' => $userId],
         ]);
 
-        return response()->json([
-            'message' => 'Friend request sent',
-            'type' => 'good',
-            'friendship' => $friendship
-        ], 201);
+        return response()->json(['message' => 'Friendship created'], 201);
     }
 
-    /*
-     * Show a specific friendship (Show)
-     */
+    // Mostrar una amistad individual (dummy)
     public function show($id)
     {
-        try {
-            $friendship = Friend::findOrFail($id);
-            return response()->json($friendship, 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(["status" => 404, "Error" => "Friendship not found"]);
-        }
+        return response()->json([]);
     }
 
-    /*
-     * Update a friend request status (Update) Accepts the friend request
-     */
+    // Actualizar amistad (dummy)
     public function update(Request $request, $id)
     {
-        try {
-            $friendship = Friend::findOrFail($id);
-            $friendship->update($request->all());
-            return response()->json(["friendship" => $friendship], 200);
-        } catch (ModelNotFoundException $e) {
-            return response()->json(["Error" => "Friendship not found"], 404);
-        }
+        return response()->json([]);
     }
 
-    /*
-     * Delete a friend or friend request (Destroy)
-     */
+    // Eliminar amistad desde sender
     public function destroyFriendRequestAsSender(Request $request)
     {
-        $request->validate([
-            'id_sender' => 'required|exists:users,id',
-            'id_receiver' => 'required|exists:users,id',
-        ]);
-
-        $idSender = $request->query('id_sender');
-        $idReceiver = $request->query('id_receiver');
-
-        if ($idSender != auth()->id()) {
-            return response()->json(['message' => 'Error you are not authorized to do this'], 401);
-        }
-
-        if ($idSender == $idReceiver) {
-            return response()->json(['message' => 'You cant be your own friend', 'type' => 'bad'], 200);
-        }
-
-        $query = Friend::where('sender_user_id', $idSender)
-            ->where('reciver_user_id', $idReceiver)
-            ->delete();
-
-        return response()->json(['data' => $query], 200);
+        return response()->json([]);
     }
 
+    // Eliminar amistad desde receiver
     public function destroyFriendRequestAsReciver(Request $request)
     {
-        $request->validate([
-            'id_sender' => 'required|exists:users,id',
-            'id_receiver' => 'required|exists:users,id',
-        ]);
-
-        $idSender = $request->query('id_sender');
-        $idReceiver = $request->query('id_receiver');
-
-        if ($idReceiver != auth()->id()) {
-            return response()->json(['message' => 'Error you are not authorized to do this'], 401);
-        }
-
-        if ($idSender == $idReceiver) {
-            return response()->json(['message' => 'You cant be your own friend', 'type' => 'bad'], 200);
-        }
-
-        $query = Friend::where('reciver_user_id', $idSender)
-            ->where('sender_user_id', $idReceiver)
-            ->delete();
-
-        return response()->json(['data' => $query], 200);
+        return response()->json([]);
     }
 
-
-
-    /*
-     Funciones personalizadas
-    */
-
-    //Shows all users that registred in the app
+    // Mostrar usuarios
     public function showUsers(Request $request)
     {
         $search = $request->query('search');
@@ -165,141 +84,91 @@ class FriendController extends Controller
             $query->where('name', 'like', "%$search%");
         }
 
-        $friends = $query->orderBy('name', 'asc')->get(['id', 'name', 'username', 'last_lng', 'last_lat']);
+        $users = $query->orderBy('name', 'asc')->get(['id', 'name', 'username', 'last_lng', 'last_lat']);
 
-        foreach ($friends as $friend) {
-            $media = $friend->getFirstMedia('users');
-            $friend->media_url = $media ? $media->getUrl() : null;
+        foreach ($users as $user) {
+            $media = $user->getFirstMedia('users');
+            $user->media_url = $media ? $media->getUrl() : null;
         }
 
-        return response()->json($friends);
+        return response()->json($users);
     }
 
-
-    //Only show friends that recived a request
+    // Mostrar solicitudes recibidas (dummy)
     public function ShowrequestsRecived(Request $request)
     {
-        $userId = auth()->user()->id;
-        $user = User::findOrFail($userId);
-        $friendRequests = $user->friendsReceived()->where('request_status', '!=', 1)->get();
-
-        return response()->json($friendRequests);
+        return response()->json([]);
     }
 
-    //Only shows friends i send a request
+    // Mostrar solicitudes enviadas (dummy)
     public function ShowrequestsSent(Request $request)
     {
-        $userId = $request->query('user');
-        $user = User::findOrFail($userId);
-        $friendRequests = $user->friendsSent()->where('request_status', '!=', 1)->get();
-
-        return response()->json($friendRequests);
+        return response()->json([]);
     }
 
-
-    //Shows all people that is in a friendship with you
-
+    // Mostrar todos los amigos reales
     public function ShowAllFriends(Request $request)
     {
         $userId = $request->query('user_id');
         $user = User::findOrFail($userId);
+        $friends = $user->friends()->get();
 
-        $friendsSent = $user->friendsSent()->where('request_status', '!=', 0)->get();
-        $friendsReceived = $user->friendsReceived()->where('request_status', '!=', 0)->get();
-
-        $allFriends = $friendsSent->merge($friendsReceived);
-
-        $formattedFriends = $allFriends->map(function ($friend) use ($user) {
-            return [
-                'id' => $friend->id,
-                'request_status' => $friend->request_status,
-                'user' => $friend->sender_user_id == $user->id ? $friend->reciver : $friend->sender,
-                'created_at' => $friend->created_at,
-                'updated_at' => $friend->updated_at,
-            ];
-        });
-
-        return response()->json($formattedFriends);
+        return response()->json($friends);
     }
 
-    //Obtains friends that i send a request
+    // Obtener IDs de usuarios con los que ya hay amistad
     public function GetUsersWithFriendRequests(Request $request)
     {
-        $userId = auth()->user()->id;
+        $userId = auth()->id();
 
-        $users = User::join('friends', 'users.id', '=', 'friends.reciver_user_id')
-            ->where('friends.sender_user_id', $userId)
-            ->select('users.id')
-            ->get();
+        $friends = DB::table('friend_user')
+            ->where('user_id', $userId)
+            ->pluck('friend_id');
 
-        return response()->json($users, 200);
+        return response()->json($friends);
     }
 
+    // Ver estado de la solicitud de amistad
     public function getRequestStatus(Request $request)
+    {
+        $userId = auth()->id();
+        $friendId = $request->query('friend_id');
+
+        if (!$friendId) {
+            return response()->json(['error' => 'friend_id is required'], 400);
+        }
+
+        $areFriends = DB::table('friend_user')
+            ->where('user_id', $userId)
+            ->where('friend_id', $friendId)
+            ->exists();
+
+        return response()->json(['value' => $areFriends], 200);
+    }
+
+
+    // Eliminar amistad mutua
+    public function deleteFriend(Request $request)
     {
         $request->validate([
             'friend_id' => 'required|exists:users,id',
         ]);
 
         $userId = auth()->id();
-        $friendId = $request->query('friend_id');
+        $friendId = $request->friend_id;
 
-        $friendship = Friend::where(function ($query) use ($userId, $friendId) {
-            $query->where('sender_user_id', $userId)
-                ->where('reciver_user_id', $friendId);
-        })
-            ->first();
+        DB::table('friend_user')->where(function ($query) use ($userId, $friendId) {
+            $query->where('user_id', $userId)->where('friend_id', $friendId);
+        })->orWhere(function ($query) use ($userId, $friendId) {
+            $query->where('user_id', $friendId)->where('friend_id', $userId);
+        })->delete();
 
-        if (!$friendship) {
-            return response()->json([
-                'value' => false,
-                'error' => 'Friendship request not found',
-            ]);
-        }
-
-        return response()->json([
-            'value' => true,
-            'message' => 'Friendship request found and sent',
-        ]);
+        return response()->json(['message' => 'Friendship deleted'], 200);
     }
 
-    //Delete Friendship or friend request (friendship or friend request its the same in the bbdd)
-    public function deleteFriend(Request $request)
-    {
-        $request->validate([
-            'friend_id' => 'required',
-        ]);
-
-        $user = auth()->user();
-
-        $friend = Friend::where(function ($query) use ($user) {
-            $query->where('sender_user_id', $user->id)
-                ->orWhere('reciver_user_id', $user->id);
-        })->findOrFail($request->friend_id);
-
-        $friend->delete();
-
-        return response()->json([
-            'message' => 'Friend deleted successfully',
-        ], 200);
-    }
-
-    //Accepts a friend request
+    // Aceptar amistad (dummy)
     public function acceptFriend(Request $request)
     {
-        $friendship_id = $request->id;
-        $friendship = Friend::find($friendship_id);
-
-        if (!$friendship) {
-            return response()->json(['error' => 'Friendship not found'], 404);
-        }
-
-        $friendship->request_status = 1;
-        $friendship->save();
-
-        return response()->json([
-            'message' => 'Friend request accepted successfully',
-            'friendship' => $friendship
-        ]);
+        return response()->json([]);
     }
 }

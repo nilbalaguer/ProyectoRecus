@@ -94,22 +94,25 @@ async function deleteRequestAsSender(friend_id) {
         console.error("Friend_id is not defined on deleteRequestAsSender(friend_id)");
         return;
     }
-    axios.get(`http://127.0.0.1:8000/api/friends/destroyRequestAsSender?id_sender=${authStore().user.id}&id_receiver=${friend_id}`)
-        .then(response => {
-            requestedUserFriendList.value = requestedUserFriendList.value.filter(friend => friend.user.id !== Number(friend_id));
 
-            if (friend_id == requestedUserData.value.id)
-                friendRequestStatus.value = false;
-        })
-        .catch(error => {
-            console.error('There was an error deleting the sender friend request:', error.response?.data || error.message);
+    try {
+        await axios.post('http://127.0.0.1:8000/api/friends/delete', {
+            friend_id: friend_id
         });
+
+        requestedUserFriendList.value = requestedUserFriendList.value.filter(friend => friend.id !== Number(friend_id));
+
+        if (friend_id == requestedUserData.value.id)
+            friendRequestStatus.value = false;
+    } catch (error) {
+        console.error('There was an error deleting the friendship:', error.response?.data || error.message);
+    }
 }
 
 async function sendRequest(id_reciver) {
     await axios.post('http://127.0.0.1:8000/api/friend', {
-        "id_sender": authStore().user.id,
-        "id_receiver": id_reciver
+        "user_id": authStore().user.id,
+        "friend_id": id_reciver
     }).then(response => {
         if (id_reciver == requestedUserData.value.id)
             friendRequestStatus.value = true;
@@ -223,30 +226,31 @@ function ProfileIsVisible() {
                             <div>
                                 <div class="d-flex flex-column">
                                     <span class="search-user-information-name" style="color: #000000;">
-                                        <a :href="'/profile/' + user.user.username" style="color: black !important;">
-                                            {{ user.user.name }}
+                                        <a :href="'/profile/' + user.username" style="color: black !important;">
+                                            {{ user.name }}
                                         </a>
                                     </span>
                                     <div class="d-flex justify-content-between align-items-center">
-
                                         <span class="search-user-information-username"
                                             style="color: white; background-color: #000000; width: fit-content;">
-                                            <a :href="'/profile/' + user.user.username"
+                                            <a :href="'/profile/' + user.username"
                                                 style="color: white !important;">
-                                                @{{ user.user.username }}
+                                                @{{ user.username }}
                                             </a>
                                         </span>
 
-
-                                        <ConfirmButtonPopup v-if="authStore().user.id == requestedUserData.id"
-                                            name="Delete" header="Delete Friend" positive_option="Delete Friend"
-                                            positive_severity="danger" button_class="danger-button border-0"
-                                            @confirmed="(result) => { if (result) { deleteFriend(user.id) } }" />
-
+                                        <ConfirmButtonPopup
+                                            v-if="authStore().user.id == requestedUserData.id"
+                                            name="Delete"
+                                            header="Delete Friend"
+                                            positive_option="Delete Friend"
+                                            positive_severity="danger"
+                                            button_class="danger-button border-0"
+                                            @confirmed="(result) => { if (result) { deleteFriend(user.id) } }"
+                                        />
                                     </div>
                                 </div>
                             </div>
-
                         </li>
                     </ul>
 
