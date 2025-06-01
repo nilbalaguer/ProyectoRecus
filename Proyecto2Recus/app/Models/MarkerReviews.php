@@ -17,5 +17,16 @@ class MarkerReviews extends Model
         'user_id',
         'marker_id',
     ];
-    
+
+    // Usuario que escribió la reseña
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Marcador que fue reseñado
+    public function marker()
+    {
+        return $this->belongsTo(Marker::class, 'marker_id');
+    }
 }

@@ -27,21 +27,11 @@ class User extends Authenticatable implements HasMedia
         'desc',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_lng' => 'double',
@@ -67,36 +57,68 @@ class User extends Authenticatable implements HasMedia
 
     public function registerMediaConversions(Media $media = null): void
     {
-        if (env(key: 'RESIZE_IMAGE') === true) {
+        if (env('RESIZE_IMAGE') === true) {
             $this->addMediaConversion('resized-image')
                 ->width(env('IMAGE_WIDTH', 312))
                 ->height(env('IMAGE_HEIGHT', 312));
         }
     }
 
-    public function sentFriendRequests() {
-        return $this->hasMany(Friend::class, 'sender_user_id');
-    }
-    
-    public function receivedFriendRequests() {
-        return $this->hasMany(Friend::class, 'reciver_user_id');
-    }
-
-    public function friendsReceived()
+    // Relaciones de amigos
+    public function friends()
     {
-        return $this->hasMany(Friend::class, 'reciver_user_id')
-                    ->with('sender');
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id')
+                    ->withTimestamps();
     }
+    //Anterior
+    // public function sentFriendRequests()
+    // {
+    //     return $this->hasMany(Friend::class, 'sender_user_id');
+    // }
 
-    public function friendsSent()
-    {
-        return $this->hasMany(Friend::class, 'sender_user_id')
-                    ->with('reciver');
-    }
+    // public function receivedFriendRequests()
+    // {
+    //     return $this->hasMany(Friend::class, 'reciver_user_id');
+    // }
 
+    // public function friendsReceived()
+    // {
+    //     return $this->hasMany(Friend::class, 'reciver_user_id')->with('sender');
+    // }
+
+    // public function friendsSent()
+    // {
+    //     return $this->hasMany(Friend::class, 'sender_user_id')->with('reciver');
+    // }
+
+
+    // Grupos de amigos a los que pertenece (N:M)
     public function friendGroups()
     {
-        return $this->belongsToMany(FriendGroup::class, 'friend_groups_friends', 'id_friend', 'friend_group_id');
+        return $this->belongsToMany(FriendGroup::class, 'friend_groups_friends', 'friends_id', 'friend_group_id');
     }
 
+    // Grupos de amigos que ha creado (1:N)
+    public function ownedFriendGroups()
+    {
+        return $this->hasMany(FriendGroup::class, 'owner_user_id');
+    }
+
+    // Listas de marcadores que ha creado (1:N)
+    public function markerLists()
+    {
+        return $this->hasMany(MarkerList::class, 'owner_user_id');
+    }
+
+    // Marcadores creados por el usuario (1:N)
+    public function markers()
+    {
+        return $this->hasMany(Marker::class, 'user_id');
+    }
+
+    // Reseñas realizadas por el usuario (1:N)
+    public function markerReviews()
+    {
+        return $this->hasMany(MarkerReviews::class, 'user_id');
+    }
 }

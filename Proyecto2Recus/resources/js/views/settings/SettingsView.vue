@@ -32,13 +32,13 @@ const items = ref([
     <div class="settings-background">
         <div class="settings-side-menu">
 
-            <Button class="secondary-button" @click="changePage('general')" icon="pi pi-align-justify"
+            <Button :class="['secondary-button', conf_page == 'general' ? 'secondary-button-selected' : 'secondary-button']" @click="changePage('general')" icon="pi pi-align-justify"
                 :label="$t('generalSettingsButton')" />
-            <Button class="secondary-button" @click="changePage('account')" icon="pi pi-user"
+            <Button :class="['secondary-button', conf_page == 'account' ? 'secondary-button-selected' : 'secondary-button']" @click="changePage('account')" icon="pi pi-user"
                 :label="$t('accountSettingsButton')" />
-            <Button class="secondary-button" @click="changePage('groups')" icon="pi pi-users"
+            <Button :class="['secondary-button', conf_page == 'groups' ? 'secondary-button-selected' : 'secondary-button']" @click="changePage('groups')" icon="pi pi-users"
                 :label="$t('groupsSettingsButton')" />
-            <Button class="secondary-button" @click="changePage('markers')" icon="pi pi-map-marker"
+            <Button :class="['secondary-button', conf_page == 'markers' ? 'secondary-button-selected' : 'secondary-button']" @click="changePage('markers')" icon="pi pi-map-marker"
                 :label="$t('markersSettingsButton')" />
             <hr>
             <Button class="secondary-button danger-button-hover" style="padding: 8px !important;" @click="logout"

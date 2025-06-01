@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Friend;
 use Illuminate\Http\Request;
 use App\Models\FriendGroup;
-use App\Models\FriendGroupFriends;
 
 class FriendGroupsController extends Controller
 {
@@ -68,33 +67,37 @@ class FriendGroupsController extends Controller
     }
 
     //Añadir un amigo a un grupo
-    public function addToGroup(Request $request) {
+    public function addToGroup(Request $request) 
+    {
         $request->validate([
             'id_group' => 'required|int|exists:friend_groups,id',
-            'id_target_user' => 'required|int',
+            'id_target_user' => 'required|int|exists:users,id',
         ]);
 
-        $group = FriendGroup::find($request->id_group);
+        $group = FriendGroup::findOrFail($request->id_group);
 
-        if (!$group) {
-            return response()->json(['message' => 'This group doesn\'t exist'], 404);
-        }
-
+        // Verify the current user is the group owner
         if (auth()->id() != $group->owner_user_id) {
-            return response()->json(['message' => 'You are not the owner of this group'], 403);
+            return response()->json([
+                'message' => 'You are not the owner of this group',
+                'type' => 'error'
+            ], 403);
         }
 
-        $exists = FriendGroupFriends::where('id_friend', $request->id_target_user)
-            ->where('friend_group_id', $request->id_group)
-            ->exists();
-
-        if (!$exists) {
+        // Check if user already in group
+        if (!$group->friends()->where('users.id', $request->id_target_user)->exists()) {
             $group->friends()->attach($request->id_target_user);
 
-            return response()->json(['message' => 'User added to the group', 'type' => 'good'], 201);
+            return response()->json([
+                'message' => 'User added to the group',
+                'type' => 'success'
+            ], 201);
         }
 
-        return response()->json(['message' => 'This User is already in this group', 'type' => 'bad'], 200);
+        return response()->json([
+            'message' => 'User is already in this group',
+            'type' => 'info'
+        ], 200);
     }
 
     public function showPeopleInGroup(Request $request) {
@@ -121,35 +124,35 @@ class FriendGroupsController extends Controller
     }
 
     //Kicks a user from a group
-    public function kickFromGroup(Request $request) {
+    public function kickFromGroup(Request $request) 
+    {
         $request->validate([
-            'id_user' => 'required|int',
-            'id_group' => 'required|int'
+            'id_user' => 'required|int|exists:users,id',
+            'id_group' => 'required|int|exists:friend_groups,id'
         ]);
-    
-        $group = FriendGroup::where('id', $request->id_group)->first();
-        if (!$group || auth()->id() != $group->owner_user_id) {
+
+        $group = FriendGroup::findOrFail($request->id_group);
+
+        if (auth()->id() != $group->owner_user_id) {
             return response()->json([
-                'message' => 'You are not the owner of this group'
+                'message' => 'You are not the owner of this group',
+                'type' => 'error'
             ], 403);
         }
-    
-        $relation = FriendGroupFriends::where('id_friend', $request->id_user)
-            ->where('friend_group_id', $request->id_group)
-            ->first();
-    
-        if (!$relation) {
+
+        $removed = $group->friends()->detach($request->id_user);
+
+        if ($removed) {
             return response()->json([
-                'message' => 'This user is not in this group'
-            ], 404);
+                'message' => 'User removed from group',
+                'type' => 'success'
+            ], 200);
         }
-    
-        $relation->delete();
-    
+
         return response()->json([
-            'message' => 'Friend Kicked',
-            'type' => 'good'
-        ], 200);
-    }    
+            'message' => 'User was not in this group',
+            'type' => 'info'
+        ], 404);
+    }
 
 }

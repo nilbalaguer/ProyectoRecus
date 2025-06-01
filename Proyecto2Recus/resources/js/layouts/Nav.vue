@@ -14,13 +14,14 @@
                     {{ $t('profile') }}
                 </div>
             </div>
+            <!--
             <div>
-                <!-- /feed (he quitado la ruta ya que no nos da tiempo a acabar esa zona de la aplicacion)-->
                 <router-link to="/"> 
                     <img src="/images/feed.svg" alt="Feet image" class="icon">
                     <p>Feed</p>
                 </router-link>
             </div>
+            -->
             <div class="nav-item">
                 <router-link to="/home" aria-current="page">
                     <img src="/images/emoji_map.webp" alt="{{ $t('home') }}">
@@ -32,12 +33,7 @@
                     {{ $t('search') }}
                 </router-link>
             </div>
-            <div>
-                <router-link to="/settings">
-                    <img src="/images/settings.svg" alt="Setings image" class="icon">
-                    <p>Settings</p>
-                </router-link>
-            </div>
+            
             <!--
                 <template v-if="!authStore().user?.name">
                     <li class="nav-item">

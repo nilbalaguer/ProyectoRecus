@@ -10,6 +10,11 @@
         <div class=" w-100 text-center">
             <h2 class="brandName">{{ $t('brandName') }}.</h2>
         </div>
+        <div>
+            <router-link to="/settings">
+                <img src="/images/settings.svg" alt="Setings image" class="icon">
+            </router-link>
+        </div>
     </header>
     <div style="height: 8vh;"></div> <!-- Margen -->
 </template>
