@@ -158,7 +158,9 @@ function ToggleCreateMarker() {
                     style="cursor: pointer;"
                 >
                     <p>{{ ubicacion.name || `Ubicación #${ubicacion.id}` }}</p> 
-                    <button><img src="images/icon_eye.svg"></button>
+                    <button class="btn border-0 bg-dark text-light p-2">
+                        <img src="images/icon_eye.svg" class="img-fluid" style="filter: brightness(0) invert(1);" />
+                    </button>
                 </li>
             </ul>
         </div>

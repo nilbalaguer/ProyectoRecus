@@ -92,7 +92,8 @@ async function RateMarker() {
       <h2 style="font-weight: 800;">{{ marker.name }}</h2>
     </div>
 
-    <div class="w-100 d-flex flex-grow-1 justify-content-center align-items-center m-0 p-0">
+    <div class="w-100 d-flex flex-column justify-content-center align-items-center m-0 p-0 text-center">
+      <p style="font-weight: normal;"> Reseñas: {{ rating_avg.count }}</p>
       <Rating v-model="rating_avg.average_stars" :stars=10 readonly>
         <template #onicon>
 
@@ -105,11 +106,12 @@ async function RateMarker() {
           <img src="/images/MarkerReviews/CryFace.webp" width="20" />
         </template>
       </Rating>
-      <p style="font-weight: normal;">({{ rating_avg.count }})</p>
 
     </div>
+    <hr>
 
     <div class="w-100 d-flex flex-column flex-grow-1 p-3">
+      <p class="text-center">Lista perteneciente:</p>
       <h3 class="m-1" style="font-style: italic;">{{ loading ? 'Cargando...' : listData }}</h3>
 
       <p
@@ -118,7 +120,8 @@ async function RateMarker() {
       </p>
 
       <hr>
-      <div class="w-100 m-auto d-flex align-items-center">
+      <div class="w-100 m-auto d-flex align-items-center flex-column text-center">
+        <p>Haz tu reseña !!</p>
         <Rating @click="RateMarker" v-model="rating_client_value" :stars="10">
           <template #onicon>
             <img v-if="rating_client_value >= 9" src="/images/MarkerReviews/Fire.webp" width="20" />

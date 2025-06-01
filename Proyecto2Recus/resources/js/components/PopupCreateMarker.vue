@@ -36,6 +36,23 @@ onMounted(async () => {
   }
 });
 
+function resetForm() {
+  markerData.value = {
+    name: "",
+    description: "",
+    marker_list_id: undefined,
+    lng: 0,
+    lat: 0,
+    zoom: 0,
+    pitch: 0,
+    bearing: 0
+  };
+  markerList_itemSelected.value = null;
+  currentPopupIndex.value = 0;
+  createMarkerList_name.value = '';
+  createMarkerList_emoji.value = null;
+}
+
 function NextPopupIndex() 
 {  
   currentPopupIndex.value = (currentPopupIndex.value + 1) % MAX_POPUP_INDEX;
@@ -55,10 +72,11 @@ function showCreateMarkerListPopup() {
   currentPopupIndex.value = 100;
 }
 
-function createMarker() 
-{ 
-  createNewMarker(markerData.value, () => visible.value = false, error => console.error(error));
-  createMarkerList_name.value = null;
+function createMarker() {
+  createNewMarker(markerData.value, () => {
+    visible.value = false;
+    resetForm();
+  }, error => console.error(error));
 }
 
 async function createMarkerListAndReturn() {

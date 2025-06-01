@@ -24,7 +24,8 @@
             -->
             <div class="nav-item">
                 <router-link to="/home" aria-current="page">
-                    <img src="/images/emoji_map.webp" alt="{{ $t('home') }}">
+                    <img src="/images/emoji_map.webp" alt="{{ $t('mapa') }}">
+                    {{ $t('mapa') }}
                 </router-link>
             </div>
             <div>

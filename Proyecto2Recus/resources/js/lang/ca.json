@@ -66,5 +66,7 @@
     "deletebutton": "Esborra",
     "username": "Nom d'usuari",
     "notregisted": "No tens una conta? Registret!",
-    "already_registered": "Ja estas registrat? Inicia sessio!"
+    "already_registered": "Ja estas registrat? Inicia sessio!",
+
+    "mapa": "Mapa"
 }
