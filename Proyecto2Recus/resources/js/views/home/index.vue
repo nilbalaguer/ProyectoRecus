@@ -21,6 +21,7 @@ const createMarkerPopupVisible = ref(false);
 const showMarkerDataPopupVisible = ref(true);
 const selectedMarkerData = ref(null);
 const historialUbicaciones = ref([]);
+const welcomeDialogVisible = ref(false);
 
 let map;
 
@@ -104,6 +105,12 @@ onMounted(async () => {
     });
 
     cargarHistorialDesdeSession();
+
+    const alreadyShown = sessionStorage.getItem('welcomePopupShown');
+    if (!alreadyShown) {
+        welcomeDialogVisible.value = true;
+        sessionStorage.setItem('welcomePopupShown', 'true');
+    }
 });
 
 async function loadUsers() {
@@ -129,6 +136,7 @@ async function loadMarkers() {
 function ToggleCreateMarker() {
     createMarkerPopupVisible.value = !createMarkerPopupVisible.value;
 }
+
 </script>
 
 <template>
@@ -158,11 +166,67 @@ function ToggleCreateMarker() {
                     style="cursor: pointer;"
                 >
                     <p>{{ ubicacion.name || `Ubicación #${ubicacion.id}` }}</p> 
-                    <button><img src="images/icon_eye.svg"></button>
+                    <button class="btn border-0 bg-dark text-light p-2">
+                        <img src="images/icon_eye.svg" class="img-fluid" style="filter: brightness(0) invert(1);" />
+                    </button>
                 </li>
             </ul>
         </div>
 
+        <div v-if="welcomeDialogVisible" class="custom-dialog-overlay" @click.self="welcomeDialogVisible = false">
+            <div class="custom-dialog">
+                <h2>Opciones del Mapa</h2>
+                <p>1. Doble click para crear un marcador - el marcador aparezera en el centro de la pantalla mueve el mapa para llevarlo a la ubicacion deseada</p>
+                <p>2. Haz click en cualquier marcador para ver su informacion</p>
+                <br>
+                <p>¡Este popup desaparecera quando cambies de pagina!</p>
+                <button class="close-btn" @click="welcomeDialogVisible = false">Cerrar</button>
+            </div>
+        </div>
+
         <div id="map"></div>
+        
     </div>
 </template>
+
+<style scoped>
+.custom-dialog-overlay {
+    position: fixed;
+    right: 1%;
+    top: 10%;
+    z-index: 2 !important;
+    background-color: black;
+    color: white;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.custom-dialog {
+    background: var(--background2);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+.custom-dialog h2 {
+    margin-top: 0;
+}
+
+.close-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background-color: #0056b3;
+}
+
+</style>
