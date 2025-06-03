@@ -170,7 +170,7 @@ function ProfileIsVisible() {
                     class="primary-button" label="Add Friend"
                     style="padding: 8px !important; padding-left: 12px !important; padding-right: 12px !important;" />
 
-                <Button v-else @click="deleteRequestAsSender(requestedUserData.id)" class="secondary-button danger-button-hover"
+                <Button v-else @click="deleteRequestAsSender(requestedUserData.id)" class="secondary-button danger-button danger-button-hover"
                     label="UnFriend" />
             </span>
 

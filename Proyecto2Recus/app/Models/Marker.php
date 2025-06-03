@@ -23,19 +23,19 @@ class Marker extends Model
         'user_id',
     ];
 
-    // Usuario que creó el marcador
+    // Usuario que creo el marcador
     public function owner()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relación 1:N con MarkerList (en caso de que uses esta columna directa además de la N:M)
+    // Relación 1:N con MarkerList
     public function markerList()
     {
         return $this->belongsTo(MarkerList::class, 'marker_list_id');
     }
 
-    // Relación N:M con MarkerList (tabla pivot marker_list_markers)
+    // Relación N:M con MarkerList
     public function lists()
     {
         return $this->belongsToMany(MarkerList::class, 'marker_list_markers', 'marker_id', 'marker_list_id');

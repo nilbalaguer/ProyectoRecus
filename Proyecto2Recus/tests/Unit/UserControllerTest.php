@@ -27,9 +27,9 @@ class UserControllerTest extends TestCase
             'role_id' => $role->id,
         ];
 
-        $response = $this->postJson('/api/users', $requestData); // Asegurate que esta ruta sea correcta
+        $response = $this->postJson('/api/users', $requestData);
 
-        $response->assertStatus(201); // Cambiar a 200 si tu controlador devuelve 200 en vez de 201
+        $response->assertStatus(201);
         $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
 
         $user = User::where('email', 'test@example.com')->first();
