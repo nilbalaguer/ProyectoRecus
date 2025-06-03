@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { authStore } from '../../../store/auth';
 import { useToast } from "primevue/usetoast";
 
@@ -16,6 +16,12 @@ const user_id = ref(auth.user?.id);
 
 const addingFriendToGroup = ref(null);
 const friendsInGroup = ref([]);
+
+const friendsNotInGroup = computed(() => {
+    return users.value.filter(user => 
+        !friendsInGroup.value.some(friend => friend.id === user.id)
+    );
+});
 
 function showMessage(message, type) {
     const typeMap = {
@@ -64,6 +70,11 @@ async function showMyFriends() {
     try {
         const response = await axios.get('http://127.0.0.1:8000/api/friends/allFriends?user_id=' + user_id.value);
         users.value = response.data;
+
+        users.value.forEach(user => {
+            console.log("Amigo disponible:", user.username);
+        });
+
     } catch (error) {
         console.error("[GroupComponentConfigurationView] Error:", error);
     }
@@ -93,6 +104,10 @@ async function showFriendsInGroup() {
     try {
         const response = await axios.get("http://127.0.0.1:8000/api/friends/friendsInGroup?id_group=" + addingFriendToGroup.value);
         friendsInGroup.value = response.data.users;
+
+        const names = friendsInGroup.value.map(friend => friend.name);
+        console.log("Amigos en el grupo:", names);
+
     } catch (error) {
         console.log("Error loading friends in group: " + error);
     }
@@ -162,22 +177,20 @@ ShowMyGroups();
                 <h3>{{ $t('do_you_want_to_add_someone') }}</h3>
 
                 <div>
-                    <div v-for="(user, index) in users" :key="index">
-                        <div class="search-user-container" v-if="!friendsInGroup.some(f => f.username === user.username)">
-                            <div class="search-user-information-container">
-                                <div>
-                                    <img src="/images/icon_profile.svg" alt="User image" class="search-user-information-image">
-                                </div>
-                                <div class="search-user-information">
-                                    <b><p class="search-user-information-name">{{ user.name }}</p></b>
-                                    <p class="search-user-information-username">{{ user.username }}</p>
-                                </div>
-                            </div>
+                    <div v-for="(user, index) in friendsNotInGroup" :key="index" class="search-user-container">
+                        <div class="search-user-information-container">
                             <div>
-                                <button @click="addFriendToGroup(user.id)" class="secondary-button">
-                                    {{ $t('addFriendText') }}
-                                </button>
+                                <img src="/images/icon_profile.svg" alt="User image" class="search-user-information-image">
                             </div>
+                            <div class="search-user-information">
+                                <b><p class="search-user-information-name">{{ user.name }}</p></b>
+                                <p class="search-user-information-username">{{ user.username }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <button @click="addFriendToGroup(user.id)" class="secondary-button">
+                                {{ $t('addFriendText') }}
+                            </button>
                         </div>
                     </div>
                 </div>
